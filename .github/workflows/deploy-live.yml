@@ -1,0 +1,55 @@
+name: Build WebAssembly and Deploy to Live
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-live-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Compile WebAssembly & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: wasm-pack-live
+
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'latest'
+
+      - name: Compile Rust codebase to WebAssembly using wasm-pack
+        run: |
+          wasm-pack build apps/photocraft-web --target web --release --out-dir pkg
+
+      - name: Prepare distribution directory
+        run: |
+          mkdir -p dist
+          cp -r apps/photocraft-web/pkg/* dist/
+          cp apps/photocraft-web/index-wasm.html dist/index.html
+
+      - name: Deploy to live branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: live
+          publish_dir: ./dist
+          commit_message: "Deploy WebAssembly build from ${{ github.sha }} [skip ci]"
