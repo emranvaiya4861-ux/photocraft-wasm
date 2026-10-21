@@ -8,6 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $env:PATH = "$env:USERPROFILE\.cargo\bin;C:\Users\EmranVaiya\.rustup\toolchains\stable-x86_64-pc-windows-gnu\lib\rustlib\x86_64-pc-windows-gnu\bin\self-contained;C:\Users\EmranVaiya\tools\bin;C:\Users\EmranVaiya\tools\git\cmd;$env:PATH"
+$env:CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER = "rust-lld"
 
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
