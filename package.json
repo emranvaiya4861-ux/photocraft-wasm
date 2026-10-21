@@ -1,0 +1,17 @@
+{
+  "name": "photocraft-web",
+  "type": "module",
+  "description": "PhotoCraft in the browser (eframe web runner, WebGPU with WebGL2 fallback)",
+  "version": "0.11.1",
+  "license": "MIT OR Apache-2.0",
+  "files": [
+    "photocraft_web_bg.wasm",
+    "photocraft_web.js",
+    "photocraft_web.d.ts"
+  ],
+  "main": "photocraft_web.js",
+  "types": "photocraft_web.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
