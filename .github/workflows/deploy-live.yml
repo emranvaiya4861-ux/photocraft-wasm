@@ -54,3 +54,4 @@ jobs:
           publish_branch: live
           publish_dir: ./dist
           commit_message: "Deploy WebAssembly build from ${{ github.sha }} [skip ci]"
+          
